@@ -696,6 +696,7 @@
    * directives subscribing to it.
    */
   var Dep = function Dep () {
+    console.log('new Dep', ...arguments)
     this.id = uid++;
     this.subs = [];
   };
@@ -716,6 +717,7 @@
 
   Dep.prototype.notify = function notify () {
     // stabilize the subscriber list first
+    console.log('notify', this.subs)
     var subs = this.subs.slice();
     if (!config.async) {
       // subs aren't sorted in scheduler if not running async
@@ -735,6 +737,7 @@
   var targetStack = [];
 
   function pushTarget (target) {
+    console.log('pushTarget', target)
     targetStack.push(target);
     Dep.target = target;
   }
@@ -902,6 +905,7 @@
    * collect dependencies and dispatch updates.
    */
   var Observer = function Observer (value) {
+    console.log('new Observer', value)
     this.value = value;
     this.dep = new Dep();
     this.vmCount = 0;
@@ -1000,6 +1004,7 @@
     customSetter,
     shallow
   ) {
+    console.log('defineReactive$$1' , obj, key)
     var dep = new Dep();
 
     var property = Object.getOwnPropertyDescriptor(obj, key);
@@ -3219,6 +3224,7 @@
     options,
     isRenderWatcher
   ) {
+    console.log('new Watcher', ...arguments)
     this.vm = vm;
     if (isRenderWatcher) {
       vm._watcher = this;

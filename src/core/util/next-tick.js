@@ -62,6 +62,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
   observer.observe(textNode, {
     characterData: true
   })
+  // 0 -> 1 -> 0 强制触发observer
   timerFunc = () => {
     counter = (counter + 1) % 2
     textNode.data = String(counter)

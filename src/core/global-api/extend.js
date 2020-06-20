@@ -33,9 +33,13 @@ export function initExtend (Vue: GlobalAPI) {
     const Sub = function VueComponent (options) {
       this._init(options)
     }
+    // 经典的原型继承方式
     Sub.prototype = Object.create(Super.prototype)
+    // 子类的构造函数为VueComponent
     Sub.prototype.constructor = Sub
     Sub.cid = cid++
+    // 按着属性的合并策略（utils/options）strats中有每个属性的合并策略
+    // data的合并中需要考虑reactive
     Sub.options = mergeOptions(
       Super.options,
       extendOptions
@@ -48,7 +52,9 @@ export function initExtend (Vue: GlobalAPI) {
     if (Sub.options.props) {
       initProps(Sub)
     }
+
     if (Sub.options.computed) {
+      // 在Sub.prototype上定义getter/setter
       initComputed(Sub)
     }
 

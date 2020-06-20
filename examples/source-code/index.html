@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../../dist/vue.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 这是comment -->
+    <div :class="ccmsg">{{ messsage }}</div>
+    <div>{{ cmsg }}</div>    
+    <button v-on:click="modify">xiugai</button>
+  </div>
+    
+  <script>
+    // const Msg = {
+    //   name: 'Msg',
+    //   template: `<span style="color: red">{{ msg }}{{ title }}</span>`,
+    //   data() {
+    //     return {
+    //       msg: 'Because The Special'
+    //     }
+    //   },
+    //   props: {
+    //     title: String
+    //   },
+    //    created() {
+    //      console.log('this is in the Msg')
+    //    }
+    // }
+
+    // Vue.component('msg', Msg)
+
+    // const Outer = {
+    //   name: 'Outer',
+    //   template: 
+    //     `<div>
+    //       <a href='//www.vipkid.com.cn'>{{ messsage }}</a>          
+    //     </div>`,
+    //   data() {
+    //     return {
+    //       messsage: 'hello world',
+    //       lists: [1, 2, 3, 4]
+    //     }
+    //   },
+    //   computed: {
+    //     cmsg() {
+    //       return this.messsage + ' hello stackbucks'
+    //     },
+    //     ccmsg: {
+    //       get: function() {
+    //         return this.messsage + ' hello coffee'
+    //       }
+    //     }
+    //   }
+    // }
+    new Vue({
+      name: 'root',
+      el: '#app',
+      data() {
+        return {
+          messsage: 'hello world'
+        }
+      },
+      computed: {
+        cmsg() {
+          return this.messsage + ' hello stackbucks'
+        },
+        ccmsg: {
+          get: function() {
+            return this.messsage + ' hello coffee'
+          }
+        }
+      },
+      methods: {
+        modify() {
+          console.log(123)
+          this.messsage = 'hello js'
+        }
+      }
+      // render: h => h(Outer)
+    })
+  </script>
+</body>
+</html>

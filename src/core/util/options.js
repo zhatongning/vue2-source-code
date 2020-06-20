@@ -26,7 +26,7 @@ import {
  * how to merge a parent option value and a child option
  * value into the final value.
  */
-const strats = config.optionMergeStrategies
+const strats = config.optionMergeStrategies // 默认为空对象
 
 /**
  * Options with restrictions
@@ -169,6 +169,21 @@ function dedupeHooks (hooks) {
   return res
 }
 
+
+// [
+//   'beforeCreate',
+//   'created',
+//   'beforeMount',
+//   'mounted',
+//   'beforeUpdate',
+//   'updated',
+//   'beforeDestroy',
+//   'destroyed',
+//   'activated',
+//   'deactivated',
+//   'errorCaptured',
+//   'ssrPrefetch'
+// ]
 LIFECYCLE_HOOKS.forEach(hook => {
   strats[hook] = mergeHook
 })
@@ -407,9 +422,22 @@ export function mergeOptions (
   // the result of another mergeOptions call.
   // Only merged options has the _base property.
   if (!child._base) {
+    // _base属性在mergeField(key)的第一阶段循环parent时产生，parent一般为Vue.options
+    // Vue.options中最基本的四个属性为components,filters,directives,_base
+    // 通过这个_base就可以判断是不是已经merge过了
+
+    // 接口文档： https://cn.vuejs.org/v2/api/#extends
+    // extends选项： 扩展另一个组件（Object|Function) Function时为构造函数，可以看成是继承了Vue的子类
+    // 这个时候选项存在于Vue.options中，这就产生了如下的代码：
+    // if (typeof child === 'function') {
+    //   child = child.options
+    // }
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)
     }
+
+    // mixins: https://cn.vuejs.org/v2/api/#mixins
+    // minins: Object[]
     if (child.mixins) {
       for (let i = 0, l = child.mixins.length; i < l; i++) {
         parent = mergeOptions(parent, child.mixins[i], vm)
@@ -420,6 +448,7 @@ export function mergeOptions (
   const options = {}
   let key
   for (key in parent) {
+    // components,filters,directives,_base
     mergeField(key)
   }
   for (key in child) {
@@ -427,6 +456,8 @@ export function mergeOptions (
       mergeField(key)
     }
   }
+
+  // 每一种属性都对应各种的合并策略
   function mergeField (key) {
     const strat = strats[key] || defaultStrat
     options[key] = strat(parent[key], child[key], vm, key)
