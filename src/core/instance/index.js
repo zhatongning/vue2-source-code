@@ -46,7 +46,15 @@ lifecycleMixin(Vue)
 
 
 /**
- * Vue.prototype.$nextTick = function() {}
+ * // src/core/util/next-tick.js 现在的版本2.5.22
+ * Vue.prototype.$nextTick = function(cb) {
+ *  维护一个cb队列，在微任务/（宏）任务中去处理事件，原则：支持microtask就在microtask中处理，macrotask作为后补
+ *  1.有promise的情况，在romise.resolve()中去处理
+ *  2.如果支持MutationObserver，将队列的处理作为回调，手动触发observer
+ *  3.如果支持setImmediate，就setImmediate
+ *  4.setTimeout(() => { handle(cbArray) }, 0)作为兜底方案
+ *}
+ *
  * Vue.prototype._render = function() {}
 */
 renderMixin(Vue)
