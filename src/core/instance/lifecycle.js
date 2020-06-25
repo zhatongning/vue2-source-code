@@ -33,6 +33,8 @@ export function initLifecycle (vm: Component) {
   const options = vm.$options
 
   // locate first non-abstract parent
+  // non-abstract 非抽象父组件
+  // vue中内置的keep-alive, slot, transition都是抽象父组件
   let parent = options.parent
   if (parent && !options.abstract) {
     while (parent.$options.abstract && parent.$parent) {

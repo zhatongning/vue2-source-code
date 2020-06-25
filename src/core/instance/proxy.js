@@ -24,6 +24,11 @@ if (process.env.NODE_ENV !== 'production') {
     )
   }
 
+  // data中的大部分数据都会被代理到实例中，如：
+  // vm = new Vue({ msg: 'hello', _msg: 'vue' })
+  // 通过vm.$data.msg或者vm.msg能访问到msg
+  // 但只能通过vm.$data._msg访问到_msg，生产环境返回undefined
+  // 开发环境还会有如下的警告
   const warnReservedPrefix = (target, key) => {
     warn(
       `Property "${key}" must be accessed with "$data.${key}" because ` +
@@ -38,6 +43,8 @@ if (process.env.NODE_ENV !== 'production') {
     typeof Proxy !== 'undefined' && isNative(Proxy)
 
   if (hasProxy) {
+    // vue内部使用的修饰符
+    // 不能覆盖这些修饰符
     const isBuiltInModifier = makeMap('stop,prevent,self,ctrl,shift,alt,meta,exact')
     config.keyCodes = new Proxy(config.keyCodes, {
       set (target, key, value) {
@@ -79,6 +86,7 @@ if (process.env.NODE_ENV !== 'production') {
     if (hasProxy) {
       // determine which proxy handler to use
       const options = vm.$options
+      // TODO: render._withStripped
       const handlers = options.render && options.render._withStripped
         ? getHandler
         : hasHandler

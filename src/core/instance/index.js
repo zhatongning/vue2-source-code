@@ -14,6 +14,7 @@ function Vue (options) {
   this._init(options)
 }
 
+// 这里使用引用文件时的“副作用”来做Vue的初始化
 // 类似_update，_render...，以_开始的方法名都是内部使用的，分析的时候结合之后的使用场景更容易立即
 
 // Vue.prototype._init
