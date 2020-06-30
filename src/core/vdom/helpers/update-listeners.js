@@ -11,6 +11,21 @@ import {
   isPlainObject
 } from 'shared/util'
 
+// 这里得结合src/compiler/helpers.js文件中的addHandler函数看
+/*
+  if (modifiers.capture) {
+    delete modifiers.capture;
+    name = '!' + name; // mark the event as captured
+  }
+  if (modifiers.once) {
+    delete modifiers.once;
+    name = '~' + name; // mark the event as once
+  }
+  if (modifiers.passive) {
+    delete modifiers.passive;
+    name = '&' + name; // mark the event as passive
+  }
+*/
 const normalizeEvent = cached((name: string): {
   name: string,
   once: boolean,

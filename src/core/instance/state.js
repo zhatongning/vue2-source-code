@@ -109,8 +109,10 @@ function initProps (vm: Component, propsOptions: Object) {
   toggleObserving(true)
 }
 
+// data的响应式在这里初始化
 function initData (vm: Component) {
   let data = vm.$options.data
+  // data在组件中定义时必须为一个返回初始数据对象的函数，getData()得到初始数据
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
@@ -129,6 +131,7 @@ function initData (vm: Component) {
   let i = keys.length
   while (i--) {
     const key = keys[i]
+    // data中key不能与props中的key，methods中的key同名，不能为保留字段
     if (process.env.NODE_ENV !== 'production') {
       if (methods && hasOwn(methods, key)) {
         warn(
@@ -144,6 +147,8 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
+      // 将data中的字段代理到vm._data中
+      // 比如 vm.a = 2 实际是 vm._data.a = 2， vm.a时获取的是vm._data.a的值
       proxy(vm, `_data`, key)
     }
   }
@@ -240,7 +245,7 @@ export function defineComputed (
 
 function createComputedGetter (key) {
   return function computedGetter () {
-    // TODO：_computedWatchers
+    // TODO：
     const watcher = this._computedWatchers && this._computedWatchers[key]
     if (watcher) {
       if (watcher.dirty) {
@@ -263,6 +268,7 @@ function createGetterInvoker(fn) {
 function initMethods (vm: Component, methods: Object) {
   const props = vm.$options.props
   for (const key in methods) {
+    // methods中必须都是方法，不能与props同名，不能是保留字
     if (process.env.NODE_ENV !== 'production') {
       if (typeof methods[key] !== 'function') {
         warn(
@@ -284,6 +290,8 @@ function initMethods (vm: Component, methods: Object) {
         )
       }
     }
+    // bind绑定this => vm，所以methods中不能使用箭头函数
+    // 方法都代理到vm上
     vm[key] = typeof methods[key] !== 'function' ? noop : bind(methods[key], vm)
   }
 }

@@ -70,6 +70,10 @@ export function initMixin(Vue: Class<Component> ) {
     }
     // expose real self
     vm._self = vm
+
+    /**
+     * 在vue实例中初始化跟生命周期相关的字段
+    */
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
