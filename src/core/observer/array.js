@@ -28,6 +28,7 @@ methodsToPatch.forEach(function (method) {
     const result = original.apply(this, args)
     const ob = this.__ob__
     let inserted
+    // 通过push、unshift、splice添加的元素都需要observe
     switch (method) {
       case 'push':
       case 'unshift':

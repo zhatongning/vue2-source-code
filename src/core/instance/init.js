@@ -90,6 +90,7 @@ export function initMixin(Vue: Class<Component> ) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    // el存在的情况一般为根节点
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }

@@ -59,6 +59,9 @@ if (process.env.NODE_ENV !== 'production') {
     })
   }
 
+  // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler/has
+  // with 检查: with(proxy) { (foo); } 会触发hasHandler
+  // 在调用vm.options.render时会触发
   const hasHandler = {
     has (target, key) {
       const has = key in target
@@ -71,7 +74,7 @@ if (process.env.NODE_ENV !== 'production') {
       return has || !isAllowed
     }
   }
-
+  
   const getHandler = {
     get (target, key) {
       if (typeof key === 'string' && !(key in target)) {

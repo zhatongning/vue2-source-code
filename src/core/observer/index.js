@@ -45,7 +45,7 @@ export class Observer {
     this.vmCount = 0
     def(value, '__ob__', this)
     if (Array.isArray(value)) {
-      if (hasProto) {
+      if (hasProto) { // __proto__的兼容
         protoAugment(value, arrayMethods)
       } else {
         copyAugment(value, arrayMethods, arrayKeys)
@@ -150,6 +150,7 @@ export function defineReactive (
   // cater for pre-defined getter/setters
   const getter = property && property.get
   const setter = property && property.set
+  // key的值不存在getter，而且没有传入value
   if ((!getter || setter) && arguments.length === 2) {
     val = obj[key]
   }
